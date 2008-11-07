@@ -21,10 +21,12 @@ module Rag
         input_row.split(',').map {|c| c.strip.to_i } # TODO put this somewhere else
       end
       
-      self.class.aggregators.map do |aggregator|
-        column = input_array.map { |row| row[aggregator.column] }
+      results = self.class.aggregators.map do |aggregator|
+        column = input_array.map { |row| row[aggregator.column] }  # TODO this is slow
         aggregator.block.call column
       end
+      
+      [results]
     end
   end
 end
