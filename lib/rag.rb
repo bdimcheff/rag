@@ -7,3 +7,4 @@ end
 
 require 'rag/aggregate'
 require 'rag/aggregator'
+require 'rag/array'
