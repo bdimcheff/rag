@@ -5,17 +5,27 @@ require File.dirname(__FILE__) + '/spec_helper.rb'
 describe "Rag::Aggregate" do
   describe 'output' do
     it "should yield all data to a block" do
-      agg_klass = Class.new(Rag::Aggregate) do
-        output(1) do |data|
-          data
+      Foo = Class.new(Rag::Aggregate) do
+        output(0) do |data|
+          data.inject(0) { |acc,i| acc + i }
         end
       end
       
-      agg = agg_klass.new("1\n2\n3")
+      agg = Foo.new("1\n2\n3")
       
-      agg.aggregate.should == [[1,2,3]]
+      agg.aggregate.should == [6]
     end
     
-    
+    it 'should work when using an anonymous class' do
+      foo = Class.new(Rag::Aggregate) do
+        output(0) do |data|
+          data.inject(0) { |acc,i| acc + i }
+        end
+      end
+      
+      agg = foo.new("1\n2\n3")
+            
+      agg.aggregate.should == [6]
+    end
   end  
 end

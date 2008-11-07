@@ -6,3 +6,4 @@ module Rag
 end
 
 require 'rag/aggregate'
+require 'rag/aggregator'

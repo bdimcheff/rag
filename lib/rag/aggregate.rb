@@ -3,14 +3,9 @@ module Rag
     class << self
       attr_accessor :aggregators
       
-      def initialize
-        aggregators = []
-      end
-      
       def output(column, &block)
-        aggregators_for_column = aggregators[column] ||= []
-        
-        aggregators_for_column << block 
+        self.aggregators ||= []
+        self.aggregators << Aggregator.new(column, block)
       end
     end
     
@@ -22,7 +17,14 @@ module Rag
     end
     
     def aggregate
+      input_array = input_data.map do |input_row|
+        input_row.split(',').map {|c| c.strip.to_i } # TODO put this somewhere else
+      end
       
+      self.class.aggregators.map do |aggregator|
+        column = input_array.map { |row| row[aggregator.column] }
+        aggregator.block.call column
+      end
     end
   end
 end
