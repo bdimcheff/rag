@@ -4,9 +4,14 @@ module Rag
       attr_accessor :aggregators
       attr_accessor :grouping
       
-      def output(column, &block)
+      def output(column)
         self.aggregators ||= []
-        self.aggregators << Aggregator.new(column, block)
+        
+        aggregator = Aggregator.new(column)
+        
+        self.aggregators << aggregator
+        
+        aggregator
       end
       
       def group_by(*args)
@@ -30,7 +35,6 @@ module Rag
           column = group_values.map { |row| row[aggregator.column] }  # TODO this is slow
           aggregator.block.call column
         end
-        
         group + group_results
       end
     end
