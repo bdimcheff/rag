@@ -6,6 +6,7 @@ module Rag
       self.column = column
     end
     
+    # TODO: make this work with streaming somehow
     # def all(&block)
     #   self.block = block
     # end
@@ -15,10 +16,8 @@ module Rag
       self.block = block
     end
     
-    # def sum
-    #   self.all do |data|
-    #     data.inject(0) { |acc,i| acc + i.to_i }
-    #   end
-    # end
+    def sum
+      self.inject(0) {|acc, i| acc + i.to_i}
+    end
   end
 end

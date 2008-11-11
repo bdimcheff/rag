@@ -29,21 +29,15 @@ module Rag
     
     def aggregate
       build_aggregates
-      
-      # puts "aggregates: " + self.aggregates.inspect
-      
-      # TODO: Need to iterate over aggregators so the aggregates get dumped in the right order
-            
-      self.aggregates.inject({}) do |acc, ((row_group, aggregator), aggregate)|
-        # puts "acc: #{acc.inspect}, row_group: #{row_group.inspect}, aggregator: #{aggregator.inspect}, aggregate: #{aggregate.inspect}"
-        
+                  
+      self.aggregates.inject({}) do |acc, (row_group, group_aggregators)|
         acc[row_group] ||= row_group.dup
         
-        # puts "acc again: #{acc.inspect}"
-        
-        acc[row_group] << aggregate
-        
-        # puts "acc finally: #{acc.inspect}"
+        self.class.aggregators.each do |aggregator|
+          aggregate = group_aggregators[aggregator]
+          
+          acc[row_group] << aggregate
+        end
         
         acc
       end.values
@@ -59,9 +53,10 @@ module Rag
         row_group = input_array.extract_columns(*grouping)
         
         self.class.aggregators.each do |aggregator|
-          aggregate = self.aggregates[[row_group, aggregator]] ||= aggregator.start
+          group = self.aggregates[row_group] ||= {}
+          aggregate = group[aggregator] ||= aggregator.start
           
-          self.aggregates[[row_group, aggregator]] = aggregator.block.call(aggregate, input_array[aggregator.column])
+          self.aggregates[row_group][aggregator] = aggregator.block.call(aggregate, input_array[aggregator.column])
         end
       end
     end

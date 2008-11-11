@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/spec_helper.rb'
 
-# Time to add your specs!
-# http://rspec.info/
 describe "Rag::Aggregate" do
   describe 'output.inject' do
     it "should yield all data to a block" do
