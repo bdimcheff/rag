@@ -3,11 +3,11 @@ require File.dirname(__FILE__) + '/spec_helper.rb'
 # Time to add your specs!
 # http://rspec.info/
 describe "Rag::Aggregate" do
-  describe 'output.all' do
+  describe 'output.inject' do
     it "should yield all data to a block" do
       Foo = Class.new(Rag::Aggregate) do
-        output(0).all do |data|
-          data.inject(0) { |acc,i| acc + i.to_i }
+        output(0).inject(0) do |acc,i| 
+          acc + i.to_i
         end
       end
       
@@ -18,8 +18,8 @@ describe "Rag::Aggregate" do
     
     it 'should work when using an anonymous class' do
       foo = Class.new(Rag::Aggregate) do
-        output(0).all do |data|
-          data.inject(0) { |acc,i| acc + i.to_i }
+        output(0).inject(0) do |acc,i| 
+          acc + i.to_i
         end
       end
       
@@ -30,12 +30,12 @@ describe "Rag::Aggregate" do
     
     it 'should work with 2 columns' do
       foo = Class.new(Rag::Aggregate) do
-        output(0).all do |data|
-          data.inject(0) { |acc,i| acc + i.to_i }
+        output(0).inject(0) do |acc,i| 
+          acc + i.to_i
         end
         
-        output(1).all do |data|
-          data.inject(0) { |acc,i| acc + i.to_i }
+        output(1).inject(0) do |acc,i| 
+          acc + i.to_i
         end
       end
       
@@ -45,17 +45,17 @@ describe "Rag::Aggregate" do
     end
   end
   
-  describe 'output.each' do
-    it "should yield each record one at a time" do
+  describe 'output.all' do
+    it "should yield all data to the block" do
       foo = Class.new(Rag::Aggregate) do
-        output(0).inject(0) do |acc,i|
-          acc + i.to_i
+        output(0).all do |data|
+          data.sort.first
         end
       end
       
-      agg = foo.new("1\n2\n3")
+      agg = foo.new("3\n2\n1")
             
-      agg.aggregate.should == [[6]]
+      agg.aggregate.should == [[1]]
     end
   end
   
@@ -75,8 +75,8 @@ describe "Rag::Aggregate" do
     it "should separate aggregates into groups" do
       foo = Class.new(Rag::Aggregate) do
         group_by 0
-        output(1).all do |data|
-          data.inject(0) { |acc,i| acc + i.to_i }
+        output(1).inject(0) do |acc,i| 
+          acc + i.to_i
         end
       end
       
@@ -88,8 +88,8 @@ describe "Rag::Aggregate" do
     it 'should work with groups with multiple items' do
       foo = Class.new(Rag::Aggregate) do
         group_by 0, 1
-        output(2).all do |data|
-          data.inject(0) { |acc,i| acc + i.to_i }
+        output(2).inject(0) do |acc,i| 
+          acc + i.to_i
         end
       end
       
