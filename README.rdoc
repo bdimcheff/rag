@@ -1,26 +1,41 @@
-= rag
+= rag - The Ruby Aggregator
 
-* FIX (url)
+* http://github.com/bdimcheff/rag/tree/master
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Rag is a Ruby-based library designed to make it easy to perform aggregates on delimited data.  It is still very experimental, but it will eventually support pluggable parsers and aggregators.  Currently, it only supports block aggregators.
 
-== FEATURES/PROBLEMS:
+== FEATURES:
 
-* FIX (list of features or problems)
+* Block Aggregators
+* Grouping
+
+== ISSUES:
+
+* Cannot aggregate when all records are required
 
 == SYNOPSIS:
-
-  FIX (code sample of usage)
+  # Basic example
+  
+  class FooAggregator < Rag::Aggregator
+    output(0).inject(0) do |acc,i|
+      acc + i.to_i
+    end
+  end
+  
+  aggregator = FooAggregator.new("1\n2\n3")
+  aggregator.aggregate # => [[6]]
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+No external dependencies required at this time
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* git clone git://github.com/bdimcheff/rag.git
+* cd rag
+* rake install_gem
 
 == LICENSE:
 
