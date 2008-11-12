@@ -30,7 +30,7 @@ module Rag
     def aggregate
       build_aggregates
                   
-      self.aggregates.inject({}) do |acc, (row_group, group_aggregators)|
+      results = self.aggregates.inject({}) do |acc, (row_group, group_aggregators)|
         acc[row_group] ||= row_group.dup
         
         self.class.aggregators.each do |aggregator|
@@ -40,7 +40,9 @@ module Rag
         end
         
         acc
-      end.values
+      end
+      
+      results.values
     end
     
     def build_aggregates

@@ -6,15 +6,16 @@ module Rag
       self.column = column
     end
     
-    # TODO: make this work with streaming somehow
-    # def all(&block)
-    #   self.block = block
-    # end
-    
     def inject(start, &block)
       self.start = start
       self.block = block
     end
+    
+    # TODO: make this work with streaming somehow
+    # def all(&block)
+    #   self.start = []
+    #   self.block = block
+    # end
     
     def sum
       self.inject(0) {|acc, i| acc + i.to_i}
